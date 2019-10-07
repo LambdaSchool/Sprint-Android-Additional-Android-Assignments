@@ -1,0 +1,92 @@
+package com.example.s09m01
+
+import android.net.Uri
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.widget.SeekBar
+import kotlinx.android.synthetic.main.activity_local_media.*
+
+class LocalMediaActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_local_media)
+
+        initOnCreate()
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        initOnStart()
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        initOnStop()
+    }
+
+    // Lifecycle initialization
+    private fun initOnCreate() {
+
+        play_pause_button.isEnabled = false
+
+        playOrPauseFunctionality()
+
+        seekBarFunctionality()
+
+    }
+    private fun initOnStart() {
+       localVideoFunctionality()
+    }
+    private fun initOnStop() {
+        local_video_view.pause()
+    }
+    // Functionality
+    private fun localVideoFunctionality() {
+
+        local_video_view.setVideoURI(VideoResources.getLocalVideoUri(packageName))
+        local_video_view.setOnPreparedListener { mp ->
+            play_pause_button.isEnabled = true
+            mp?.let {
+                local_video_seekbar.max = mp.duration
+            }
+        }
+
+    }
+    private fun playOrPauseFunctionality() {
+        play_pause_button.setOnClickListener {
+            when(local_video_view.isPlaying) {
+                false -> {
+                    local_video_view.start()
+                    play_pause_button.setImageDrawable(getDrawable(R.drawable.ic_pause_black_24dp))
+                }
+                true -> {
+                    local_video_view.pause()
+                    play_pause_button.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_black_24dp))
+                }
+            }
+        }
+    }
+    private fun seekBarFunctionality() {
+        local_video_seekbar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                seekBar?.let {
+                    local_video_view.seekTo(progress)
+                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+        })
+    }
+}
