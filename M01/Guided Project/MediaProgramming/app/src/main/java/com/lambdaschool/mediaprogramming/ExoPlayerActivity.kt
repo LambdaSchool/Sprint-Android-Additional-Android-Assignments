@@ -32,8 +32,8 @@ class ExoPlayerActivity : AppCompatActivity() {
     //TODO 4: Declare the variables needed. A simpleExoPlayer instance.
     lateinit var videoExoPlayer: SimpleExoPlayer
     //TODO 5: Notice the url we will be using to streaming mp4 over the internet.
-    val URL = "https://archive.org/download/Popeye_forPresident/Popeye_forPresident_512kb.mp4"
-
+  //  val URL = "https://archive.org/download/Popeye_forPresident/Popeye_forPresident_512kb.mp4"
+      val URL = "https://my.mail.ru/mail/irinaosnova/video/3417/3492.html"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_exo_player)
@@ -44,8 +44,8 @@ class ExoPlayerActivity : AppCompatActivity() {
         //TODO 7: Create a function to setup video player from file system
         //This function can be switched out with the setupVideoPlayerWithURL to stream the video
         //from the internet.
-        //setupVideoPlayerFromFileSystem()
-        setupVideoPlayerWithURL()
+        setupVideoPlayerFromFileSystem()
+        //setupVideoPlayerWithURL()
         //TODO 9: Setup clicklisteners for play and pause buttons
         play.setOnClickListener { videoExoPlayer.playWhenReady = true }
         pause.setOnClickListener { videoExoPlayer.playWhenReady = false }
@@ -55,7 +55,7 @@ class ExoPlayerActivity : AppCompatActivity() {
     }
 
     fun setupVideoPlayerFromFileSystem() {
-        videoExoPlayer.prepare(createRawMediaSource(R.raw.live_views_of_starman))
+        videoExoPlayer.prepare(createRawMediaSource(R.raw.hitman))
     }
 
     //TODO 8: Create a function to setup video player with url to stream video through internet.
