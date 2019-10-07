@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">S09M01</string>
+    <string name="app_name">S09M01Assignment</string>
+    <string name="press_to_play_or_pause">Press to play or Pause</string>
 </resources>

@@ -1,61 +1,63 @@
-package com.example.s09m01
+package com.example.s09m01.ui
 
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.SeekBar
-import kotlinx.android.synthetic.main.activity_local_media.*
+import com.example.s09m01.VideoResources
+import com.example.s09m01Assignment.R
+import kotlinx.android.synthetic.main.activity_local_media2.*
 
 class LocalMediaActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_local_media)
+        setContentView(R.layout.activity_local_media2)
 
-        initOnCreate()
+        onCreateImplementation()
 
     }
 
     override fun onStart() {
         super.onStart()
 
-        initOnStart()
+        onStartImplementation()
 
     }
 
     override fun onStop() {
         super.onStop()
 
-        initOnStop()
+        onStopImplementation()
     }
 
-    // Lifecycle initialization
-    private fun initOnCreate() {
+    // Lifecycle implementation
+    private fun onCreateImplementation() {
 
         play_pause_button.isEnabled = false
 
         playOrPauseFunctionality()
 
-        seekBarFunctionality()
+        seekBarChangeFunctionality()
 
     }
-    private fun initOnStart() {
-       localVideoFunctionality()
+    private fun onStartImplementation() {
+        setVideo()
+        syncSeekBarWithVideoFunctionality()
     }
-    private fun initOnStop() {
+    private fun onStopImplementation() {
         local_video_view.pause()
     }
     // Functionality
-    private fun localVideoFunctionality() {
-
-        local_video_view.setVideoURI(VideoResources.getLocalVideoUri(packageName))
+    private fun syncSeekBarWithVideoFunctionality() {
         local_video_view.setOnPreparedListener { mp ->
             play_pause_button.isEnabled = true
             mp?.let {
                 local_video_seekbar.max = mp.duration
             }
         }
-
+    }
+    private fun setVideo() {
+        local_video_view.setVideoURI(VideoResources.getLocalVideoUri(packageName))
     }
     private fun playOrPauseFunctionality() {
         play_pause_button.setOnClickListener {
@@ -71,7 +73,7 @@ class LocalMediaActivity : AppCompatActivity() {
             }
         }
     }
-    private fun seekBarFunctionality() {
+    private fun seekBarChangeFunctionality() {
         local_video_seekbar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 seekBar?.let {
