@@ -1,6 +1,7 @@
 package com.example.myownlocation
 
 import android.content.Intent
+import android.location.SettingInjectorService
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -9,8 +10,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 
 import com.example.myownlocation.dummy.DummyContent
+import com.example.myownlocation.model.MeModel
+import com.example.myownlocation.viewModel.Injection
+import com.example.myownlocation.viewModel.ItemListViewModel
 import kotlinx.android.synthetic.main.activity_item_list.*
 import kotlinx.android.synthetic.main.item_list_content.view.*
 import kotlinx.android.synthetic.main.item_list.*
@@ -30,6 +36,7 @@ class ItemListActivity : AppCompatActivity() {
      * device.
      */
     private var twoPane: Boolean = false
+    private lateinit var itemListViewModel: ItemListViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +44,10 @@ class ItemListActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
         toolbar.title = title
+
+        itemListViewModel = ViewModelProviders
+            .of(this, Injection.provideViewModelFactory())
+            .get(ItemListViewModel::class.java)
 
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -69,11 +80,11 @@ class ItemListActivity : AppCompatActivity() {
 
         init {
             onClickListener = View.OnClickListener { v ->
-                val item = v.tag as DummyContent.DummyItem
+                val item = v.tag as MeModel
                 if (twoPane) {
                     val fragment = ItemDetailFragment().apply {
                         arguments = Bundle().apply {
-                            putString(ItemDetailFragment.ARG_ITEM_ID, item.id)
+                            putSerializable(ItemDetailFragment.ARG_ITEM_ID, item)
                         }
                     }
                     parentActivity.supportFragmentManager
@@ -82,11 +93,12 @@ class ItemListActivity : AppCompatActivity() {
                         .commit()
                 } else {
                     val intent = Intent(v.context, ItemDetailActivity::class.java).apply {
-                        putExtra(ItemDetailFragment.ARG_ITEM_ID, item.id)
+                        putExtra(ItemDetailFragment.ARG_ITEM_ID, item)
                     }
                     v.context.startActivity(intent)
                 }
             }
+
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
