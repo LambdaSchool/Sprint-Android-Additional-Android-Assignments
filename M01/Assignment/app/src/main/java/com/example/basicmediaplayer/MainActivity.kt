@@ -1,11 +1,14 @@
 package com.example.basicmediaplayer
 
+import android.media.MediaPlayer
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.widget.SeekBar
 import androidx.annotation.RawRes
 import androidx.core.graphics.convertTo
+import androidx.core.os.postDelayed
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
 import com.google.android.exoplayer2.source.ExtractorMediaSource
@@ -30,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     //TODO 4: Declare the variables needed. A simpleExoPlayer instance.
     lateinit var videoExoPlayer: SimpleExoPlayer
 
+
     //TODO 5: Notice the url we will be using to streaming mp4 over the internet.
     //  val URL = "https://archive.org/download/Popeye_forPresident/Popeye_forPresident_512kb.mp4"
     val URL = "https://my.mail.ru/mail/irinaosnova/video/3417/3492.html"
@@ -53,14 +57,22 @@ class MainActivity : AppCompatActivity() {
             video_seek_bar.max = videoExoPlayer.duration.toInt()
 
             //todo display the time
-            iptext.text = videoExoPlayer.duration.toString().toInt().toString()
+        val handler = Handler()
+            this@MainActivity.runOnUiThread ( object : Runnable{
+                override fun run() {
+                    val currentPos = videoExoPlayer.currentPosition
+                    video_seek_bar.progress = currentPos.toInt()
+                    println("CURRENT POS: $currentPos")
+                    iptext.text = "$currentPos"
+                    handler.postDelayed(this, 1000)
+                }
 
-
+            })
         }
         pause.setOnClickListener { videoExoPlayer.playWhenReady = false }
 
         //TODO 9a: Set the player for the PlayerView
-        playerView.player = videoExoPlayer
+        video_view.player = videoExoPlayer
 
     }
 
