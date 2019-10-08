@@ -1,7 +1,4 @@
 <resources>
     <string name="app_name">MyOwnLocation</string>
     <string name="title_activity_maps">Map</string>
-    <string name="title_item_list">Items</string>
-    <string name="title_item_detail">Item Detail</string>
-    <string name="distance">%1$f Km away</string>
 </resources>

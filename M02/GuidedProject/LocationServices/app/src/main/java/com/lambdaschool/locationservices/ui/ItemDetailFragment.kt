@@ -118,7 +118,6 @@ class ItemDetailFragment : Fragment(), OnMapReadyCallback {
         val lat = item?.location?.coordinates?.latitude ?: 0.0
         val lon = item?.location?.coordinates?.longitude ?: 0.0
         val city = item?.location?.city ?: "unknown city"
-        val latlon = LatLng(lat, lon)
         // Using known world locations, since lat/lng from API call is random (and usually in the middle of the Pacific...)
         val location = WORLD_LOCS.random()
         // TODO: S09M02-9 use location data to move the camera and place a pin
