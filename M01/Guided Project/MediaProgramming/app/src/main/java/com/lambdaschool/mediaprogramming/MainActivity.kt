@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
         video_seek_bar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 seekBar?.let {
-                    video_view.seekTo(progress)
+                            video_view.seekTo(progress)
                 }
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) { }

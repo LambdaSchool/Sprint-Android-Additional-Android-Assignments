@@ -3,16 +3,16 @@ package com.example.basicmediaplayer
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.SeekBar
 import androidx.annotation.RawRes
+import androidx.core.graphics.convertTo
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.MediaSource
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
-import com.google.android.exoplayer2.upstream.DataSource
-import com.google.android.exoplayer2.upstream.DataSpec
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
-import com.google.android.exoplayer2.upstream.RawResourceDataSource
+import com.google.android.exoplayer2.upstream.*
 import com.google.android.exoplayer2.util.Util
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
 
     //TODO 4: Declare the variables needed. A simpleExoPlayer instance.
     lateinit var videoExoPlayer: SimpleExoPlayer
+
     //TODO 5: Notice the url we will be using to streaming mp4 over the internet.
     //  val URL = "https://archive.org/download/Popeye_forPresident/Popeye_forPresident_512kb.mp4"
     val URL = "https://my.mail.ru/mail/irinaosnova/video/3417/3492.html"
@@ -43,13 +44,40 @@ class MainActivity : AppCompatActivity() {
         //This function can be switched out with the setupVideoPlayerWithURL to stream the video
         //from the internet.
         setupVideoPlayerFromFileSystem()
+        seekBarFunctionality()
         //setupVideoPlayerWithURL()
         //TODO 9: Setup clicklisteners for play and pause buttons
-        play.setOnClickListener { videoExoPlayer.playWhenReady = true }
+        play.setOnClickListener {
+
+            videoExoPlayer.playWhenReady = true
+            video_seek_bar.max = videoExoPlayer.duration.toInt()
+
+            //todo display the time
+            iptext.text = videoExoPlayer.duration.toString().toInt().toString()
+
+
+        }
         pause.setOnClickListener { videoExoPlayer.playWhenReady = false }
 
         //TODO 9a: Set the player for the PlayerView
         playerView.player = videoExoPlayer
+
+    }
+
+    private fun seekBarFunctionality() {
+        // In the SeekBar listener, when the seekbar progress is changed,
+        // update the video progress
+        video_seek_bar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                seekBar?.let {
+                    videoExoPlayer.seekTo(progress.toLong())
+                }
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) { }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) { }
+
+        })
     }
 
     fun setupVideoPlayerFromFileSystem() {
@@ -74,7 +102,10 @@ class MainActivity : AppCompatActivity() {
         // Set up the scaling mode to crop and fit the video to the screen
         videoExoPlayer.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
 
+
+
     }
+
 
     //TODO 12: Do not forget to stop the player when the user navigates away from the screen
     override fun onStop() {
