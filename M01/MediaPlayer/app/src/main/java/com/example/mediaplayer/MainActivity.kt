@@ -13,6 +13,13 @@ import java.net.URI
 class MainActivity : AppCompatActivity() {
 
     private val handler = Handler()
+    private val handlerRunnable = object: Runnable{
+        override fun run() {
+            runOnUiThread {
+                video_duration.setText("${TimeUnit.MILLISECONDS.toMinutes(video_view.currentPosition.toLong())}:${TimeUnit.MILLISECONDS.toSeconds(video_view.currentPosition.toLong())%60}")
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,11 +36,7 @@ class MainActivity : AppCompatActivity() {
         }
         seekBarFunctionality()
 
-        handler.postDelayed({
-            runOnUiThread {
-                video_duration.setText("${TimeUnit.MILLISECONDS.toMinutes(video_view.currentPosition.toLong())}:${TimeUnit.MILLISECONDS.toSeconds(video_view.currentPosition.toLong())%60}")
-            }
-        }, 1000)
+        handler.postDelayed(handlerRunnable, 1000)
     }
 
     //good for displaying animations
@@ -53,9 +56,11 @@ class MainActivity : AppCompatActivity() {
             //pause it
             video_view.pause()
             btn_pause_or_play.setImageDrawable(getDrawable(R.drawable.avd_anim_pause_play))
+            handler.removeCallbacks(handlerRunnable)
         } else{
             video_view.start()
             btn_pause_or_play.setImageDrawable(getDrawable(R.drawable.avd_anim_play_pause))
+            handler.postDelayed(handlerRunnable, 1000)
         }
         (btn_pause_or_play.drawable as Animatable).start()
     }
