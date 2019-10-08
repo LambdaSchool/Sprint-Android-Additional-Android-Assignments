@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
+import android.location.LocationManager.NETWORK_PROVIDER
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -90,11 +91,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             //googleMap= googleMap1
         }
     }
-    @SuppressLint("MissingPermission")
+
     private fun gpsTracker(googleMap1: GoogleMap){
         if (gpsTracker.canGetLoaction()) {
             locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+          location = locationManager.getLastKnownLocation(NETWORK_PROVIDER)
             gpsTracker.onLocationChanged(location)
 
             latitude = gpsTracker.getLatitude()
@@ -139,7 +140,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         builder.setCancelable(true)
                         builder.setTitle("Alert")
                         builder.setMessage("Location permission is required")
-                        builder.setPositiveButton("OK") { dialogInterface, i -> dialogInterface.dismiss() }
+                        builder.setPositiveButton("OK") { dialogInterface, i ->
+                            dialogInterface.dismiss() }
                         builder.show()
                     }
                 }
