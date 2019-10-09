@@ -30,7 +30,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, ActivityCompat.OnR
 
         btn_center_current_location.setOnClickListener {
             //center on user's location in the map fragment
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(currentLocation.latitude, currentLocation.longitude)))
+            currentLocation?.let{
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(it.latitude, it.longitude)))
+            }
         }
 
         btn_add_pin.setOnClickListener {
@@ -68,7 +70,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, ActivityCompat.OnR
         LocationServices.getFusedLocationProviderClient(this)
             .lastLocation.addOnSuccessListener {
             currentLocation = it
-            tv_current_location.text = "${tv_current_location.text} Latitude - ${currentLocation.latitude} Longitude - ${currentLocation.longitude}"
+            tv_current_location.text = "${tv_current_location.text} Latitude - ${it.latitude} Longitude - ${it.longitude}"
         }
     }
 
