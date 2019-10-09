@@ -18,6 +18,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import java.util.*
+import kotlin.Comparator
 
 /**
  * An activity representing a list of Items. This activity
@@ -52,6 +53,12 @@ class ItemListActivity : AppCompatActivity() {
         toolbar.title = title
 
         // TODO 3: get handle to drawer layout and bind to toolbar toggle
+        drawerLayout = findViewById(R.id.drawer_layout)
+        val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer)
+
+        drawerLayout?.addDrawerListener(toggle)
+        toggle.syncState()
+
 
         swApiObjects = ArrayList()
 
@@ -68,13 +75,27 @@ class ItemListActivity : AppCompatActivity() {
         setupRecyclerView(recyclerView as RecyclerView)
 
         // TODO 6: create a menu item selection listener and bind it to our navigation view
+        val navigationView = findViewById<NavigationView>(R.id.nav_view)
+        navigationView.setNavigationItemSelectedListener {menuItem ->
+            menuItem.isChecked = true
+            swApiObjects?.clear()
+            viewAdapter?.notifyDataSetChanged()
+            when (menuItem.itemId){
+                R.id.nav_category_people -> {  getData(TYPE_PEOPLE)}
+                R.id.nav_category_planets -> { getData(TYPE_PLANETS)}
+                R.id.nav_category_starships -> {getData(TYPE_STARSHIPS)}
+
+            }
+            drawerLayout?.closeDrawers()
+            true
+        }
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
         swApiObjects?.let {
             viewAdapter = SimpleItemRecyclerViewAdapter(this, it, mTwoPane)
             recyclerView.adapter = viewAdapter
-            //        getData();
+             //      getData();
         }
     }
 
@@ -136,58 +157,38 @@ class ItemListActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Initialize the contents of the Activity's standard options menu.  You
-     * should place your menu items in to <var>menu</var>.
-     *
-     *
-     * This is only called once, the first time the options menu is
-     * displayed.  To update the menu every time it is displayed, see
-     * [.onPrepareOptionsMenu].
-     *
-     *
-     * The default implementation populates the menu with standard system
-     * menu items.  These are placed in the [Menu.CATEGORY_SYSTEM] group so that
-     * they will be correctly ordered with application-defined menu items.
-     * Deriving classes should always call through to the base implementation.
-     *
-     *
-     * You can safely hold on to <var>menu</var> (and any items created
-     * from it), making modifications to it as desired, until the next
-     * time onCreateOptionsMenu() is called.
-     *
-     *
-     * When you add items to the menu, you can implement the Activity's
-     * [.onOptionsItemSelected] method to handle them there.
-     *
-     * @param menu The options menu in which you place your items.
-     * @return You must return true for the menu to be displayed;
-     * if you return false it will not be shown.
-     * @see .onPrepareOptionsMenu
-     *
-     * @see .onOptionsItemSelected
-     */
-    // TODO 7: add our menu to the toolbar menu
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.sort_menu, menu)
 
-    /**
-     * This hook is called whenever an item in your options menu is selected.
-     * The default implementation simply returns false to have the normal
-     * processing happen (calling the item's Runnable or sending a message to
-     * its Handler as appropriate).  You can use this method for any items
-     * for which you would like to do processing without those other
-     * facilities.
-     *
-     *
-     * Derived classes should call through to the base class for it to
-     * perform the default menu handling.
-     *
-     * @param menuItem The menu item that was selected.
-     * @return boolean Return false to allow normal menu processing to
-     * proceed, true to consume it here.
-     * @see .onCreateOptionsMenu
-     */
 
-    // TODO 8: Add logic to listener
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId){
+            R.id.menu_sort -> {
+                //sort by name or what ever
+                swApiObjects?.sortWith(object : Comparator<SwApiObject>{
+                    override fun compare(p0: SwApiObject?, p1: SwApiObject?): Int {
+                        return if (p0 == null || p1 == null) {
+                            0
+                        } else {
+
+                            p0.name.compareTo(p1.name, true)
+                        }
+                    }
+                })
+                viewAdapter?.notifyDataSetChanged()
+
+            }
+            R.id.show_toast -> {
+                Toast.makeText(this, "Congrats Your getting it", Toast.LENGTH_LONG).show()
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
 
     class SimpleItemRecyclerViewAdapter
 
