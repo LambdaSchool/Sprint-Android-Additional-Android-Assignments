@@ -5,18 +5,26 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeUnit
 import android.widget.SeekBar
+import android.widget.Toast
+import androidx.core.os.postDelayed
 import kotlinx.android.synthetic.main.activity_main.*
-import java.net.URI
 
 class MainActivity : AppCompatActivity() {
 
     private val handler = Handler()
+
     private val handlerRunnable = object: Runnable{
         override fun run() {
             runOnUiThread {
-                video_duration.setText("${TimeUnit.MILLISECONDS.toMinutes(video_view.currentPosition.toLong())}:${TimeUnit.MILLISECONDS.toSeconds(video_view.currentPosition.toLong())%60}")
+                if(video_view.isPlaying){
+                    Toast.makeText(this@MainActivity, "HIMAN", Toast.LENGTH_SHORT).show()
+                }
+                else {
+                    video_view.start()
+                }
+                handler.postDelayed(this, 5000)
             }
         }
     }
@@ -31,12 +39,11 @@ class MainActivity : AppCompatActivity() {
         video_view.setOnPreparedListener { mp->
             video_view.isEnabled = true
             mp?.let{
-                video_seekbar.max = mp.duration
+                video_seekbar.max = it.duration
+                handlerRunnable.run()
             }
         }
-        seekBarFunctionality()
-
-        handler.postDelayed(handlerRunnable, 1000)
+        //seekBarFunctionality()
     }
 
     //good for displaying animations
@@ -56,11 +63,11 @@ class MainActivity : AppCompatActivity() {
             //pause it
             video_view.pause()
             btn_pause_or_play.setImageDrawable(getDrawable(R.drawable.avd_anim_pause_play))
-            handler.removeCallbacks(handlerRunnable)
+            //handler.removeCallbacks(handlerRunnable)
         } else{
             video_view.start()
             btn_pause_or_play.setImageDrawable(getDrawable(R.drawable.avd_anim_play_pause))
-            handler.postDelayed(handlerRunnable, 1000)
+            //handler.post(handlerRunnable)
         }
         (btn_pause_or_play.drawable as Animatable).start()
     }
