@@ -17,14 +17,16 @@ class MainActivity : AppCompatActivity() {
 
     private val handlerRunnable = object: Runnable{
         override fun run() {
-            runOnUiThread {
-                if(video_view.isPlaying){
-                    Toast.makeText(this@MainActivity, "HIMAN", Toast.LENGTH_SHORT).show()
+            while(true) {
+                runOnUiThread {
+                    if (video_view.isPlaying) {
+                        Toast.makeText(this@MainActivity, "HIMAN", Toast.LENGTH_SHORT).show()
+                    } else {
+                        video_view.start()
+                    }
+                    //handler.postDelayed(this, 5000)
+                    Thread.sleep(5000)
                 }
-                else {
-                    video_view.start()
-                }
-                handler.postDelayed(this, 5000)
             }
         }
     }
@@ -39,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         video_view.setOnPreparedListener { mp->
             video_view.isEnabled = true
             mp?.let{
-                video_seekbar.max = it.duration
+                video_seekbar.max = 100
                 handlerRunnable.run()
             }
         }
