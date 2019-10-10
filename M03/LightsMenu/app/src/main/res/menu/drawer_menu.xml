@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/controller"
+            android:checkable="true"
+            android:title="Controller Configuration" />
+        <item
+            android:id="@+id/light_config"
+            android:checkable="true"
+            android:title="Light Configuration" />
+        <item
+            android:id="@+id/light_select"
+            android:checkable="true"
+            android:title="Light Selecting" />
+    </group>
+
+    <item android:title="Settings">
+        <menu>
+            <item
+                android:id="@+id/dark_mode"
+                android:title="Dark Mode" />
+        </menu>
+    </item>
+
+</menu>

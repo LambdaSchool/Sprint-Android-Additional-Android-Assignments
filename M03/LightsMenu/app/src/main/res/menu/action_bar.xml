@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group>
+        <item
+            android:id="@+id/light_off"
+            android:title="Turn light off"
+            app:showAsAction="always"
+            android:icon="@mipmap/ic_launcher_round"/>
+        <item
+            android:id="@+id/add_light"
+            android:title="Add Light"
+            app:showAsAction="always"
+            android:icon="@mipmap/ic_launcher"/>
+        <item
+            android:id="@+id/toggle_count"
+            android:title="Toggle Display Count"/>
+        <item
+            android:id="@+id/sort"
+            android:title="Sort"/>
+
+    </group>
+
+
+
+</menu>
