@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    android:id="@+id/nav_header"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="176dp"
+    android:gravity="center"
+    android:background="@color/colorAccent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/nav_header_controller"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:textColor="@android:color/white"
+        android:text="Controller selected:"/>
+
+
+    <TextView
+        android:id="@+id/nav_header_pattern"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:layout_marginTop="8dp"
+        android:textColor="@android:color/white"
+        android:text="Active pattern is:"/>
+
+
+</LinearLayout>
